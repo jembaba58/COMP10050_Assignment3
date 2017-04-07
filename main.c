@@ -16,7 +16,7 @@ int main(void)
 	time_t t;
 	srand((unsigned) time(&t));
 
-	int row, column, boardSize;
+	int row, column, boardSize=7;
 
 	struct slot *upLeft;
 	struct slot *upRight;
@@ -75,11 +75,17 @@ int main(void)
 	pointsElf(players);
 	pointsWizard(players);
 
-	int boardSize = 7;
-
 	createBoard(boardSize, &upLeft, &upRight, &downLeft, &downRight);
 
-	getDesiredElement(boardSize, &row, &column);
+	int k, n;
+	for(i=0; i<numplayers; i++)
+	{
+		k = rand()%(boardSize);
+		n = rand()%(boardSize);
+
+		players[i].positionRow = k;
+		players[i].positionColumn = n;
+	}
 
 	if(row >= boardSize/2){
 		if(column >= boardSize/2){
