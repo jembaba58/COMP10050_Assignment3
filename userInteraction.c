@@ -9,15 +9,6 @@
 #include <stdlib.h>
 #include "crossfireOperations.h"
 
-int getBoardSize()
-{
-	int boardSize;
-	printf("Please enter the required size of the board\n");
-	//asks the user to enter the desired board size
-	scanf("%d", &boardSize);
-	return boardSize;
-}
-
 void getDesiredElement(int boardSize, int *row, int *col)
 {
 	printf("Please enter the column and the Row of the desired slot \n");
