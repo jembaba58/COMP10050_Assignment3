@@ -18,7 +18,7 @@ void getDesiredElement(int boardSize, int *row, int *col)
 			printf("Row: ");
 			scanf("%d", row);
 			printf("%d\n", *row);
-			if(row < 0 && *row >= boardSize)
+			if(*row < 0 && *row >= boardSize)
 				printf("Error: Incorrect row dimension\n");
 		} while(*row < 0 && *row >= boardSize);
 
