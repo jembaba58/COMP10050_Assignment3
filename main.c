@@ -43,7 +43,7 @@ int main(void)
 					printf("\nPlease enter the name and player type (elf, human, ogre or wizard) for player %d (in lowercase letters and in the format: player name, player type) :\n", i+1);
 					scanf("%s, %s", players[i].name, players[i].player_type);
 
-					//check if what the user inputted is valid
+					//check if what the user inputed is valid
 					if(strcmp(players[i].player_type, "elf") == 0 || strcmp(players[i].player_type, "human") == 0 || strcmp(players[i].player_type, "ogre") == 0 || strcmp(players[i].player_type, "wizard") == 0)
 					{
 						invalid1 = 1;
@@ -63,7 +63,7 @@ int main(void)
 		}
 	}
 
-	//initialise all players life points at 100
+	//initialise all players life points to 100
 	for(i=0; i<numplayers; i++)
 	{
 		players[i].life_pts = 100;
@@ -75,7 +75,7 @@ int main(void)
 	pointsElf(players);
 	pointsWizard(players);
 
-	boardSize = getBoardSize();
+	int boardSize = 7;
 
 	createBoard(boardSize, &upLeft, &upRight, &downLeft, &downRight);
 
