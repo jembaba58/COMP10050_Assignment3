@@ -23,10 +23,12 @@ struct player
 	int skill;
 	int luck;
 	int dexterity;
-	int position;
+	int positionRow;
+	int positionColumn;
 };
 
 struct slot{
+	char type[20];
 	int row;
 	int column;
 
@@ -36,7 +38,6 @@ struct slot{
 	struct slot *down;
 }slot;
 
-int getBoardSize();
 void getDesiredElement(int maxsize, int * row, int * col);
 void createBoard(int boardSize, struct slot **upLeft, struct slot **upRight, struct slot **downLeft, struct slot **downRight);
 void reachDesiredElement(int row, int column, struct slot * initialSlot);
