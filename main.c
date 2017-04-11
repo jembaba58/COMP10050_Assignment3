@@ -10,6 +10,7 @@
 #include <time.h>
 #include <string.h>
 #include "crossfireOperations.h"
+#include <math.h>
 
 int main(void)
 {
