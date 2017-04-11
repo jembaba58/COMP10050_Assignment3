@@ -307,7 +307,24 @@ int main(void)
 		}
 	}
 
+// Print player names, types and life points after each round and check if any player out of game
+printf("\n");
+for(i=0; i < numplayers; i++)
+{
+	printf("%s (%s, %d)\n", players[i].name, players[i].player_type, players[i].life_pts);
+}
 
+//When a player’s life points become <= 0 that player has to leave the game.
+//Do this after each round to see if someone is down to 0 lift points
+for(i=0; i < numplayers; i++)
+{
+	if(players[i].life_pts <= 0)
+	{
+		printf("Game over for player %d", i);
+		numplayers-=1;
+		
+	}
+}
 	return 0;
 }
 
