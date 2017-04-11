@@ -123,7 +123,7 @@ int main(void)
 		printf("Enter 1 to move to an adjacent slot, 2 to attack another player, or 3 to exit the game.\n");
 		scanf("%d", &choice);
 
-		int invalid3 = 0, checker, rowChoice, columnChoice, attkType;
+		int invalid3 = 0, checker, rowChoice, columnChoice, attkType, quit;
 
 		while(invalid3 == 0);
 		{
@@ -325,6 +325,19 @@ for(i=0; i < numplayers; i++)
 		
 	}
 }
+	
+for(i=0; i<numplayers;i++)
+{
+	printf("Do you want to quit the game(1 for No, 2 for Yes.");
+	scanf("%d", &quit);
+	
+	if(quit==2)
+	{
+		numplayers-=1;
+	}
+	
+}
+
 	return 0;
 }
 
