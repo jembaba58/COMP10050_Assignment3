@@ -250,8 +250,49 @@ int main(void)
 				invalid3 = 1;
 			}
 			else if(choice == 2)
-			{
+				{
+				printf("Please specify the number of the player you intend to attack");
+				scanf(%d, &players[num]);
+				printf("Please specify the type of attack: 1 for near, 2 for distant, 3 for magic");
+				scanf(%d, &attkType);
 
+				//the test for the near attack
+				if(attkType = 1)
+				{
+					if(testAdjacent(players[i], players[num]) = 0)//Call the test first to see if they are adjacent
+					{
+						printf("Attack not allowed: player not in range");//If they're not adjacent
+					}
+					else
+					{
+						nearAttack(players[num]);//Call the attack if they're adjacent
+					}
+				}
+
+				//The test for the distant attack
+				else if(attkType = 2)
+				{
+					if(distantTest(players[i], players[num]) = 0) //Call the test for the distant attack
+					{
+						printf("Attack not allowed: player not in range");
+					}
+					else
+					{
+						distantAttack(players[i], players[num]); //Call the attack if the distance is 2,3 or 4
+					}	
+
+					//Test for the magic attack
+				else if(attkType = 3)
+				{
+					if(players[i].smartness + players[i].magicskills <= 150)
+					{
+						printf("Attack not allowed: points not sufficient");
+					}
+					else
+					{
+						magicAttack(players[i], players[num]); // Call the attack if the attacker has more than 150.
+					}	
+				}
 				invalid3 = 1;
 			}
 			else if(choice == 3)
