@@ -12,6 +12,13 @@
 #include "crossfireOperations.h"
 #include <math.h>
 
+//Function Prototypes
+void nearAttack(struct player players[int num]);
+void distantAttack(struct player players[int attacker], struct player players[int attacked]);
+void magicAttack(struct player players[int attacker], struct player players[int attacked]);
+bool adjacentTest(struct player players[int attacker], struct player players[int attacked]);
+bool distantTest(struct player players[int m], struct player players[int n]);
+
 int main(void)
 {
 	setbuf(stdout, NULL);
@@ -116,7 +123,7 @@ int main(void)
 		printf("Enter 1 to move to an adjacent slot, 2 to attack another player, or 3 to exit the game.\n");
 		scanf("%d", &choice);
 
-		int invalid3 = 0, checker, rowChoice, columnChoice;
+		int invalid3 = 0, checker, rowChoice, columnChoice, attkType;
 
 		while(invalid3 == 0);
 		{
@@ -321,9 +328,7 @@ bool distantTest(struct player players[int m], struct player players[int n])
 	if(adjacentTest(players[m], players[n]) = 1){
 	test = 0; // player [m] fails the distant test if he's adjacent to player[n]
 }
-distance = max(abs(players[m].positionRow - players[n].positionRow), abs(players[m].positionCol - players[n].positionCol));
-//include math library
-//create max function
+distance = abs(players[m].positionRow - players[n].positionRow) + abs(players[m].positionCol - players[n].positionCol);
 
 if(distance >= 5)
 {
