@@ -34,6 +34,7 @@ int main(void)
 	struct slot *downRight;
 
 	struct player players[numplayers];
+	struct slot **board;
 
 	int i, h;
 	int invalid=0, invalid1=0; //checking variable to make sure user inputs are valid
@@ -86,7 +87,7 @@ int main(void)
 	pointsElf(players);
 	pointsWizard(players);
 
-	createBoard(boardSize, &upLeft, &upRight, &downLeft, &downRight);
+	createBoard(boardSize, &upLeft, &upRight, &downLeft, &downRight, &board);
 
 	int k, n;
 	for(i=0; i<numplayers; i++)
@@ -131,7 +132,7 @@ int main(void)
 			{
 				do
 				{
-					printf("You are currently in slot (%d, %d) of type %s", players[pcounter].positionRow, players[pcounter].positionColumn, slot[pcounter].type);
+					printf("You are currently in slot (%d, %d) of type %s", players[pcounter].positionRow, players[pcounter].positionColumn, board[players[pcounter].positionRow][players[pcounter].positionColumn].type);
 
 					if(players[pcounter].positionRow == 1 && players[pcounter].positionColumn == 1)
 					{
@@ -142,12 +143,16 @@ int main(void)
 						{
 							players[pcounter].positionRow = 1;
 							players[pcounter].positionColumn = 2;
+							slotType(&board, players, pcounter);
+
 							checker=1;
 						}
 						else if(rowChoice == 2 && columnChoice == 1)
 						{
 							players[pcounter].positionRow = 2;
 							players[pcounter].positionColumn = 1;
+							slotType(&board, players, pcounter);
+
 							checker=1;
 						}
 						else
@@ -165,12 +170,16 @@ int main(void)
 						{
 							players[pcounter].positionRow = 1;
 							players[pcounter].positionColumn = 6;
+							slotType(&board, players, pcounter);
+
 							checker=1;
 						}
 						else if(rowChoice == 2 && columnChoice == 7)
 						{
 							players[pcounter].positionRow = 2;
 							players[pcounter].positionColumn = 7;
+							slotType(&board, players, pcounter);
+
 							checker=1;
 						}
 						else
@@ -188,12 +197,16 @@ int main(void)
 						{
 							players[pcounter].positionRow = 7;
 							players[pcounter].positionColumn = 6;
+							slotType(&board, players, pcounter);
+
 							checker=1;
 						}
 						else if(rowChoice == 6 && columnChoice == 7)
 						{
 							players[pcounter].positionRow = 6;
 							players[pcounter].positionColumn = 7;
+							slotType(&board, players, pcounter);
+
 							checker=1;
 						}
 						else
@@ -211,12 +224,16 @@ int main(void)
 						{
 							players[pcounter].positionRow = 6;
 							players[pcounter].positionColumn = 1;
+							slotType(&board, players, pcounter);
+
 							checker=1;
 						}
 						else if(rowChoice == 7 && columnChoice == 2)
 						{
 							players[pcounter].positionRow = 7;
 							players[pcounter].positionColumn = 2;
+							slotType(&board, players, pcounter);
+
 							checker=1;
 						}
 						else
@@ -235,21 +252,29 @@ int main(void)
 						if(rowChoice == players[pcounter].positionRow + 1 && columnChoice == players[pcounter].positionColumn)
 						{
 							players[pcounter].positionRow = players[pcounter].positionRow + 1;
+							slotType(&board, players, pcounter);
+
 							checker=1;
 						}
 						else if(rowChoice == players[pcounter].positionRow && columnChoice == players[pcounter].positionColumn + 1)
 						{
 							players[pcounter].positionColumn = players[pcounter].positionColumn + 1;
+							slotType(&board, players, pcounter);
+
 							checker=1;
 						}
 						else if(rowChoice == players[pcounter].positionRow - 1 && columnChoice == players[pcounter].positionColumn)
 						{
 							players[pcounter].positionRow = players[pcounter].positionRow - 1;
+							slotType(&board, players, pcounter);
+
 							checker=1;
 						}
 						else if(rowChoice == players[pcounter].positionRow && columnChoice == players[pcounter].positionColumn - 1)
 						{
 							players[pcounter].positionColumn = players[pcounter].positionColumn - 1;
+							slotType(&board, players, pcounter);
+
 							checker=1;
 						}
 						else
@@ -310,7 +335,7 @@ int main(void)
 			}
 			else if(choice == 3)
 			{
-				printf("\n%s has left the game.\n", players[pcounter].name)
+				printf("\n%s has left the game.\n", players[pcounter].name);
 				for(h=pcounter; h<numplayers; h++)
 				{
 					players[h].name = players[h+1].name;
@@ -335,43 +360,29 @@ int main(void)
 		}
 	}
 
-// Print player names, types and life points after each round and check if any player out of game
-printf("\n");
-for(i=0; i < numplayers; i++)
-{
-	printf("%s (%s, %d)\n", players[i].name, players[i].player_type, players[i].life_pts);
-}
-
-//When a player’s life points become <= 0 that player has to leave the game.
-//Do this after each round to see if someone is down to 0 lift points
-for(i=0; i < numplayers; i++)
-{
-	if(players[i].life_pts <= 0)
+	// Print player names, types and life points after each round and check if any player out of game
+	printf("\n");
+	for(i=0; i < numplayers; i++)
 	{
-		printf("Game over for player %d", i);
-		for(k = i + 1; k < numplayers; k++)
-		{
-			players[i] = players[i + 1];
-		}
-			numplayers-=1;
-
+		printf("%s (%s, %d)\n", players[i].name, players[i].player_type, players[i].life_pts);
 	}
-}
-		// Termination of game
-		for(i=0; i < numplayers; i++)
+
+	//When a player’s life points become <= 0 that player has to leave the game.
+	//Do this after each round to see if someone is down to 0 lift points
+	for(i=0; i < numplayers; i++)
+	{
+		if(players[i].life_pts <= 0)
 		{
-			printf("Do you wish to quit the game?: enter 1 for No, 2 for Yes");
-			scanf(%d, &quit)
-			if(quit == 2){
 			printf("Game over for player %d", i);
 			for(k = i + 1; k < numplayers; k++)
 			{
 				players[i] = players[i + 1];
 			}
-			numplayers -= 1;
-		}
+				numplayers-=1;
 
-}
+		}
+	}
+
 	return 0;
 }
 void nearAttack(struct player players[], int attkPlyr)
@@ -394,13 +405,7 @@ void distantAttack(struct player players[], int pcounter, int attkPlyr)
 }
 void magicAttack(struct player players[], int pcounter, int attkPlyr)
 {
-	if(players[pcounter].smartness + players[pcounter].skill > 150)
-	{
-		//It determines a decrease in the life points of the attacked player equal to
-		//((0.5 * Magic Skills of attacker player) + (0.2 * Smartness of attacker player))
-
-		players[attkPlyr].life_pts = players[attkPlyr].skill*0.5 + players[attkPlyr].smartness*0.2;
-	}
+	players[attkPlyr].life_pts = players[attkPlyr].skill*0.5 + players[attkPlyr].smartness*0.2;
 }
 //adjacent test
 int adjacentTest(struct player players[], int pcounter, int attkPlyr)
@@ -437,4 +442,35 @@ int distantTest(struct player players[], int pcounter, int attkPlyr)
 		test = 1;
 	}
 	return test;
+}
+
+void slotType(struct slot **board, struct player players, int pcounter)
+{
+	int nothing=0;
+	if(strcmp(board[players[pcounter].positionRow][players[pcounter].positionColumn].type, "Hill") == 0)
+	{
+		if(players[pcounter].dexterity < 50)
+		{
+			players[pcounter].strength -=10;
+		}
+		else if(players[pcounter].dexterity >= 60)
+		{
+			players[pcounter].strength +=10;
+		}
+	}
+	else if(strcmp(board[players[pcounter].positionRow][players[pcounter].positionColumn].type, "City") == 0)
+	{
+		if(players[pcounter].smartness > 60)
+		{
+			players[pcounter].skill +=10;
+		}
+		else if(players[pcounter].smartness <= 50)
+		{
+			players[pcounter].dexterity -=10;
+		}
+	}
+	else
+	{
+		nothing++;
+	}
 }
