@@ -131,25 +131,28 @@ int main(void)
 			{
 				do
 				{
-					printf("You are currently in slot (%d, %d) of type %s", players[i].positionRow, players[i].positionColumn, slot[i].type);
+					printf("You are currently in slot (%d, %d) of type %s", players[pcounter].positionRow, players[pcounter].positionColumn, slot[pcounter].type);
 
-					if(players[i].positionRow == 1 && players[i].positionColumn == 1)
+					if(players[pcounter].positionRow == 1 && players[pcounter].positionColumn == 1)
 					{
 						printf("You can move to slot (1, 2) or (2, 1). Enter your choice in the form: (x, y).");
 						scanf("(%d, %d)" &rowChoice, &columnChoice);
 
 						if(rowChoice == 1 && columnChoice == 2)
 						{
-
+							players[pcounter].positionRow = 1;
+							players[pcounter].positionColumn = 2;
 							checker=1;
 						}
 						else if(rowChoice == 2 && columnChoice == 1)
 						{
-
+							players[pcounter].positionRow = 2;
+							players[pcounter].positionColumn = 1;
 							checker=1;
 						}
 						else
 						{
+							printf("Invalid choice.\n");
 							checker=0;
 						}
 					}
@@ -160,16 +163,19 @@ int main(void)
 
 						if(rowChoice == 1 && columnChoice == 6)
 						{
-
+							players[pcounter].positionRow = 1;
+							players[pcounter].positionColumn = 6;
 							checker=1;
 						}
 						else if(rowChoice == 2 && columnChoice == 7)
 						{
-
+							players[pcounter].positionRow = 2;
+							players[pcounter].positionColumn = 7;
 							checker=1;
 						}
 						else
 						{
+							printf("Invalid choice.\n");
 							checker=0;
 						}
 					}
@@ -180,16 +186,19 @@ int main(void)
 
 						if((rowChoice == 7 && columnChoice == 6))
 						{
-
+							players[pcounter].positionRow = 7;
+							players[pcounter].positionColumn = 6;
 							checker=1;
 						}
 						else if(rowChoice == 6 && columnChoice == 7)
 						{
-
+							players[pcounter].positionRow = 6;
+							players[pcounter].positionColumn = 7;
 							checker=1;
 						}
 						else
 						{
+							printf("Invalid choice.\n");
 							checker=0;
 						}
 					}
@@ -200,48 +209,52 @@ int main(void)
 
 						if(rowChoice == 6 && columnChoice == 1)
 						{
-
+							players[pcounter].positionRow = 6;
+							players[pcounter].positionColumn = 1;
 							checker=1;
 						}
 						else if(rowChoice == 7 && columnChoice == 2)
 						{
-
+							players[pcounter].positionRow = 7;
+							players[pcounter].positionColumn = 2;
 							checker=1;
 						}
 						else
 						{
+							printf("Invalid choice.\n");
 							checker=0;
 						}
 					}
 					else
 					{
 						printf("You can move to slot (%d, %d) or (%d, %d) or (%d, %d) or (%d, %d). Enter your choice in the form: (x, y)."
-								, players[i].positionRow + 1, players[i].positionColumn, players[i].positionRow, players[i].positionColumn + 1
-								, players[i].positionRow - 1, players[i].positionColumn, players[i].positionRow, players[i].positionColumn - 1);
+								, players[pcounter].positionRow + 1, players[pcounter].positionColumn, players[pcounter].positionRow, players[pcounter].positionColumn + 1
+								, players[pcounter].positionRow - 1, players[pcounter].positionColumn, players[pcounter].positionRow, players[pcounter].positionColumn - 1);
 						scanf("(%d, %d)" &rowChoice, &columnChoice);
 
-						if(rowChoice == players[i].positionRow + 1 && columnChoice == players[i].positionColumn)
+						if(rowChoice == players[pcounter].positionRow + 1 && columnChoice == players[pcounter].positionColumn)
 						{
-
+							players[pcounter].positionRow = players[pcounter].positionRow + 1;
 							checker=1;
 						}
-						else if(rowChoice == players[i].positionRow && columnChoice == players[i].positionColumn + 1)
+						else if(rowChoice == players[pcounter].positionRow && columnChoice == players[pcounter].positionColumn + 1)
 						{
-
+							players[pcounter].positionColumn = players[pcounter].positionColumn + 1;
 							checker=1;
 						}
-						else if(rowChoice == players[i].positionRow - 1 && columnChoice == players[i].positionColumn)
+						else if(rowChoice == players[pcounter].positionRow - 1 && columnChoice == players[pcounter].positionColumn)
 						{
-
+							players[pcounter].positionRow = players[pcounter].positionRow - 1;
 							checker=1;
 						}
-						else if(rowChoice == players[i].positionRow && columnChoice == players[i].positionColumn - 1)
+						else if(rowChoice == players[pcounter].positionRow && columnChoice == players[pcounter].positionColumn - 1)
 						{
-
+							players[pcounter].positionColumn = players[pcounter].positionColumn - 1;
 							checker=1;
 						}
 						else
 						{
+							printf("Invalid choice.\n");
 							checker=0;
 						}
 					}
