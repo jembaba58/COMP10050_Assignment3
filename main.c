@@ -13,11 +13,11 @@
 #include <math.h>
 
 //Function Prototypes
-void nearAttack(struct player players[int num]);
-void distantAttack(struct player players[int attacker], struct player players[int attacked]);
-void magicAttack(struct player players[int attacker], struct player players[int attacked]);
-bool adjacentTest(struct player players[int attacker], struct player players[int attacked]);
-bool distantTest(struct player players[int m], struct player players[int n]);
+void nearAttack(struct player players[], int attkPlyr);
+void distantAttack(struct player players[], int pcounter, int attkPlyr);
+void magicAttack(struct player players[], int pcounter, int attkPlyr);
+int adjacentTest(struct player players[], pcounter, attkPlyr);
+int distantTest(struct player players[], int pcounter, int attkPlyr);
 
 int main(void)
 {
@@ -123,7 +123,7 @@ int main(void)
 		printf("Enter 1 to move to an adjacent slot, 2 to attack another player, or 3 to exit the game.\n");
 		scanf("%d", &choice);
 
-		int invalid3 = 0, checker, rowChoice, columnChoice, attkType, quit;
+		int invalid3 = 0, checker, rowChoice, columnChoice, attkType, attkPlyr, quit;
 
 		while(invalid3 == 0);
 		{
@@ -263,54 +263,63 @@ int main(void)
 				invalid3 = 1;
 			}
 			else if(choice == 2)
-				{
+			{
 				printf("Please specify the number of the player you intend to attack");
-				scanf(%d, &players[num]);
+				scanf("%d", &attkPlyr);
 				printf("Please specify the type of attack: 1 for near, 2 for distant, 3 for magic");
-				scanf(%d, &attkType);
+				scanf("%d", &attkType);
 
 				//the test for the near attack
-				if(attkType = 1)
+				if(attkType == 1)
 				{
-					if(testAdjacent(players[i], players[num]) = 0)//Call the test first to see if they are adjacent
+					if(testAdjacent(players[i], attkPlyr) == 0)//Call the test first to see if they are adjacent
 					{
 						printf("Attack not allowed: player not in range");//If they're not adjacent
 					}
 					else
 					{
-						nearAttack(players[num]);//Call the attack if they're adjacent
+						nearAttack(attkPlyr);//Call the attack if they're adjacent
 					}
 				}
 
 				//The test for the distant attack
-				else if(attkType = 2)
+				else if(attkType == 2)
 				{
-					if(distantTest(players[i], players[num]) = 0) //Call the test for the distant attack
+					if(distantTest(players[i], attkPlyr) == 0) //Call the test for the distant attack
 					{
 						printf("Attack not allowed: player not in range");
 					}
 					else
 					{
-						distantAttack(players[i], players[num]); //Call the attack if the distance is 2,3 or 4
-					}	
-
+						distantAttack(players[i], attkPlyr); //Call the attack if the distance is 2,3 or 4
+					}
+				}
 					//Test for the magic attack
-				else if(attkType = 3)
+				else if(attkType == 3)
 				{
-					if(players[i].smartness + players[i].magicskills <= 150)
+					if(players[i].smartness + players[i].skill <= 150)
 					{
 						printf("Attack not allowed: points not sufficient");
 					}
 					else
 					{
-						magicAttack(players[i], players[num]); // Call the attack if the attacker has more than 150.
-					}	
+						magicAttack(players[i], attkPlyr); // Call the attack if the attacker has more than 150.
+					}
 				}
 				invalid3 = 1;
 			}
 			else if(choice == 3)
 			{
-
+				players[pcounter].name = players[pcounter+1].name;
+				char player_type[10];
+				int life_pts;
+				int smartness;
+				int strength;
+				int skill;
+				int luck;
+				int dexterity;
+				int positionRow;
+				int positionColumn;
 				invalid3 = 1;
 			}
 			else
@@ -339,95 +348,87 @@ for(i=0; i < numplayers; i++)
 			players[i] = players[i + 1];
 		}
 			numplayers-=1;
-		
+
 	}
 }
 		// Termination of game
 		for(i=0; i < numplayers; i++)
 		{
-		printf("Do you wish to quit the game?: enter 1 for No, 2 for Yes");
-		scanf(%d, &quit)
-		if(quit == 2){
-		printf("Game over for player %d, i);
-		for(k = i + 1; k < numplayers; k++)
-		{
-			players[i] = players[i + 1];
-		}
+			printf("Do you wish to quit the game?: enter 1 for No, 2 for Yes");
+			scanf(%d, &quit)
+			if(quit == 2){
+			printf("Game over for player %d", i);
+			for(k = i + 1; k < numplayers; k++)
+			{
+				players[i] = players[i + 1];
+			}
 			numplayers -= 1;
 		}
-	
-}
 
+}
 	return 0;
 }
-
-void nearAttack(struct player players[int num])
+void nearAttack(struct player players[], int attkPlyr)
 {
-	if(players[num].strength <= 70)
+	if(players[attkPlyr].strength <= 70)
 	{
-		players[num].life_pts -= players[num].strength*0.5;
+		players[attkPlyr].life_pts -= players[attkPlyr].strength*0.5;
 	}
-
-	else if(players[num].strength > 70)
+	else if(players[attkPlyr].strength > 70)
 	{
-		players[num].life_pts -= players[num].strength*0.3;
+		players[attkPlyr].life_pts -= players[attkPlyr].strength*0.3;
 	}
 }
-
-void distantAttack(struct player players[int attacker], struct player players[int attacked])
-
+void distantAttack(struct player players[], int pcounter, int attkPlyr)
 {
-	if(players[attacker].dexterity > players[attacked].dexterity)
+	if(players[pcounter].dexterity > players[attkPlyr].dexterity)
 	{
-		players[attacker].life_pts -= players[attacked].strength*0.3;
+		players[pcounter].life_pts -= players[attkPlyr].strength*0.3;
 	}
 }
-
-void magicAttack(struct player players[int attacker], struct player players[int attacked])
+void magicAttack(struct player players[], int pcounter, int attkPlyr)
 {
-	if(players[attacker].smartness + players[attacker].skill > 150)
+	if(players[pcounter].smartness + players[pcounter].skill > 150)
 	{
-		It determines a decrease in the life points of the attacked player equal to 
-		((0.5 * Magic Skills of attacker player) + (0.2 * Smartness of attacker player))
-		
-		players[attacked].life_pts = players[attacker].skill*0.5 + players[attacked].smartness*0.2
+		//It determines a decrease in the life points of the attacked player equal to
+		//((0.5 * Magic Skills of attacker player) + (0.2 * Smartness of attacker player))
 
+		players[attkPlyr].life_pts = players[attkPlyr].skill*0.5 + players[attkPlyr].smartness*0.2;
 	}
-
 }
 //adjacent test
-bool adjacentTest(struct player players[int attacker], struct player players[int attacked])
+int adjacentTest(struct player players[], pcounter, attkPlyr)
 {
-	if((players[attacked].positionRow - players[attacker].positionRow = 1 || players[attacked].positionRow - players[attacker].positionRow = 0 players[attacked].positionRow - players[attacker].positionRow = -1) &&
-	(players[attacked].positionColumn - players[attacker].positionColumn == 1 ||players[attacked].positionColumn - players[attacker].positionColumn == 0 || players[attacked].positionColumn - players[attacker].positionColumn == -1))
-	
+	if((players[attkPlyr].positionRow - players[pcounter].positionRow == 1 || players[attkPlyr].positionRow - players[pcounter].positionRow == 0 || players[attkPlyr].positionRow - players[pcounter].positionRow == -1) &&
+		(players[attkPlyr].positionColumn - players[pcounter].positionColumn == 1 || players[attkPlyr].positionColumn - players[pcounter].positionColumn == 0 || players[attkPlyr].positionColumn - players[pcounter].positionColumn == -1))
 	{
 		return 1;
 	}
-
 	else
 	{
 		return 0;
-	}		
-			
-}
+	}
 
+}
 // test to see if the conditions for the distant attack are met
-bool distantTest(struct player players[int m], struct player players[int n])
+int distantTest(struct player players[], int pcounter, int attkPlyr)
 {
 	int test, distance;
-	if(adjacentTest(players[m], players[n]) = 1){
-	test = 0; // player [m] fails the distant test if he's adjacent to player[n]
-}
-distance = abs(players[m].positionRow - players[n].positionRow) + abs(players[m].positionCol - players[n].positionCol);
 
-if(distance >= 5)
-{
-	test = 0;
-}
-else
-{
-	test = 1;
-}
-bool = test;
+	if(adjacentTest(players[attkPlyr], players[pcounter]) == 1)
+	{
+		test = 0; // player [m] fails the distant test if he's adjacent to player[n]
+	}
+
+	distance = abs(players[attkPlyr].positionRow - players[pcounter].positionRow) + abs(players[attkPlyr].positionColumn - players[pcounter].positionColumn);
+
+	if(distance >= 5)
+	{
+		test = 0;
+	}
+	else
+	{
+		test = 1;
+	}
+	return test;
 }
