@@ -36,14 +36,14 @@ struct slot{
 	struct slot *right;
 	struct slot *up;
 	struct slot *down;
-}slot;
+};
 
-void getDesiredElement(int maxsize, int * row, int * col);
-void createBoard(int boardSize, struct slot **upLeft, struct slot **upRight, struct slot **downLeft, struct slot **downRight);
-void reachDesiredElement(int row, int column, struct slot * initialSlot);
+void createBoard(int boardSize, struct slot **upLeft, struct slot **upRight, struct slot **downLeft, struct slot **downRight, struct slot **board);
 void pointsHuman(struct player players[]);
 void pointsOgre(struct player players[]);
 void pointsElf(struct player players[]);
 void pointsWizard(struct player players[]);
+
+
 #endif
 
