@@ -11,19 +11,24 @@
 #include <time.h>
 #include "crossfireOperations.h"
 
-void createBoard(int boardSize, struct slot **upLeft, struct slot **upRight, struct slot **downLeft, struct slot **downRight)
+void createBoard(int boardSize, struct slot **upLeft, struct slot **upRight, struct slot **downLeft, struct slot **downRight, struct slot **board)
 {
-	struct slot **board = malloc(boardSize *sizeof(struct slot));
+	**board = malloc(boardSize *sizeof(struct slot));
 
 	int i, j;
 
-	for(i=0; i<boardSize; i++){
+	for(i=0; i<boardSize; i++)
+	{
 		board[i] = malloc(boardSize *sizeof(struct slot));
 	}
 
-	for(j=0; j<boardSize; j++){
-		board[i][j].row = i;
-		board[i][j].column = j;
+	for(j=0; j<boardSize; j++)
+	{
+		for(i=0; i<boardSize; i++)
+		{
+			board[i][j].row = i;
+			board[i][j].column = j;
+		}
 	}
 
 	for(i=1; i<boardSize-1; i++){
@@ -68,7 +73,7 @@ void createBoard(int boardSize, struct slot **upLeft, struct slot **upRight, str
 	*downRight = &board[boardSize -1][boardSize -1];
 
 	int d;
-	for (i=0; i < boardSize; i++)
+	for(i=0; i < boardSize; i++)
 	{
 		for(d=0; d < boardSize; i++)
 		{
@@ -92,39 +97,8 @@ void createBoard(int boardSize, struct slot **upLeft, struct slot **upRight, str
 	}
 }
 
-void reachDesiredElement(int row, int column, struct slot *initialSlot)
-{
-	bool found = false;
-	struct slot *currentSlot = initialSlot;
 
-	printf("Initial slot (%d, %d) -> \n",initialSlot->row,initialSlot->column);
 
-	while(found == false){
 
-		if(currentSlot->row > row){
-			currentSlot = currentSlot->up;
-			printf("Current slot (%d, %d) -> \n",currentSlot->row,currentSlot->column);
 
-		}
-		if(currentSlot->row < row){
-			currentSlot = currentSlot->down;
-			printf("Current slot (%d, %d) -> \n",currentSlot->row,currentSlot->column);
 
-		}
-		if(currentSlot->column > column){
-			currentSlot = currentSlot->left;
-			printf("Current slot (%d, %d) -> \n",currentSlot->row,currentSlot->column);
-		}
-
-		if(currentSlot->column < column){
-			currentSlot = currentSlot->right;
-			printf("Current slot (%d, %d) -> \n",currentSlot->row,currentSlot->column);
-
-		}
-		if(currentSlot->column == column && currentSlot->row == row){
-			printf("Found\n");
-			found = true;
-		}
-
-	}
-}
