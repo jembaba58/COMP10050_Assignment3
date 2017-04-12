@@ -321,7 +321,11 @@ for(i=0; i < numplayers; i++)
 	if(players[i].life_pts <= 0)
 	{
 		printf("Game over for player %d", i);
-		numplayers-=1;
+		for(k = i + 1; k < numplayers; k++)
+		{
+			players[i] = players[i + 1];
+		}
+			numplayers-=1;
 		
 	}
 }
@@ -332,9 +336,11 @@ for(i=0; i < numplayers; i++)
 		scanf(%d, &quit)
 		if(quit == 2){
 		printf("Game over for player %d, i);
-		for(k = i + 1; k < numplayers; k++){
-		players[i] = players[i + 1];
-		numplayers -= 1;
+		for(k = i + 1; k < numplayers; k++)
+		{
+			players[i] = players[i + 1];
+		}
+			numplayers -= 1;
 		}
 	
 }
