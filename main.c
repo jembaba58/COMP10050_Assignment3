@@ -16,7 +16,7 @@
 void nearAttack(struct player players[], int attkPlyr);
 void distantAttack(struct player players[], int pcounter, int attkPlyr);
 void magicAttack(struct player players[], int pcounter, int attkPlyr);
-int adjacentTest(struct player players[], pcounter, attkPlyr);
+int adjacentTest(struct player players[], int pcounter, int attkPlyr);
 int distantTest(struct player players[], int pcounter, int attkPlyr);
 
 int main(void)
@@ -35,7 +35,7 @@ int main(void)
 
 	struct player players[numplayers];
 
-	int i;
+	int i, h;
 	int invalid=0, invalid1=0; //checking variable to make sure user inputs are valid
 
 	while(invalid==0)
@@ -272,7 +272,7 @@ int main(void)
 				//the test for the near attack
 				if(attkType == 1)
 				{
-					if(testAdjacent(players[i], attkPlyr) == 0)//Call the test first to see if they are adjacent
+					if(adjacentTest(players, pcounter, attkPlyr) == 0)//Call the test first to see if they are adjacent
 					{
 						printf("Attack not allowed: player not in range");//If they're not adjacent
 					}
@@ -285,13 +285,13 @@ int main(void)
 				//The test for the distant attack
 				else if(attkType == 2)
 				{
-					if(distantTest(players[i], attkPlyr) == 0) //Call the test for the distant attack
+					if(distantTest(players, pcounter, attkPlyr) == 0) //Call the test for the distant attack
 					{
 						printf("Attack not allowed: player not in range");
 					}
 					else
 					{
-						distantAttack(players[i], attkPlyr); //Call the attack if the distance is 2,3 or 4
+						distantAttack(players, pcounter, attkPlyr); //Call the attack if the distance is 2,3 or 4
 					}
 				}
 					//Test for the magic attack
@@ -303,23 +303,29 @@ int main(void)
 					}
 					else
 					{
-						magicAttack(players[i], attkPlyr); // Call the attack if the attacker has more than 150.
+						magicAttack(players, pcounter, attkPlyr); // Call the attack if the attacker has more than 150.
 					}
 				}
 				invalid3 = 1;
 			}
 			else if(choice == 3)
 			{
-				players[pcounter].name = players[pcounter+1].name;
-				char player_type[10];
-				int life_pts;
-				int smartness;
-				int strength;
-				int skill;
-				int luck;
-				int dexterity;
-				int positionRow;
-				int positionColumn;
+				printf("\n%s has left the game.\n", players[pcounter].name)
+				for(h=pcounter; h<numplayers; h++)
+				{
+					players[h].name = players[h+1].name;
+					players[h].player_type = players[h+1].player_type;
+					players[h].life_pts = players[h+1].life_pts;
+					players[h].smartness = players[h+1].smartness;
+					players[h].strength = players[h+1].strength;
+					players[h].skill = players[h+1].skill;
+					players[h].luck = players[h+1].luck;
+					players[h].dexterity = players[h+1].dexterity;
+					players[h].positionRow = players[h+1].positionRow;
+					players[h].positionColumn = players[h+1].positionColumn;
+				}
+				numplayers--;
+
 				invalid3 = 1;
 			}
 			else
@@ -397,7 +403,7 @@ void magicAttack(struct player players[], int pcounter, int attkPlyr)
 	}
 }
 //adjacent test
-int adjacentTest(struct player players[], pcounter, attkPlyr)
+int adjacentTest(struct player players[], int pcounter, int attkPlyr)
 {
 	if((players[attkPlyr].positionRow - players[pcounter].positionRow == 1 || players[attkPlyr].positionRow - players[pcounter].positionRow == 0 || players[attkPlyr].positionRow - players[pcounter].positionRow == -1) &&
 		(players[attkPlyr].positionColumn - players[pcounter].positionColumn == 1 || players[attkPlyr].positionColumn - players[pcounter].positionColumn == 0 || players[attkPlyr].positionColumn - players[pcounter].positionColumn == -1))
