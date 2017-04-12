@@ -325,16 +325,17 @@ for(i=0; i < numplayers; i++)
 		
 	}
 }
-	
-for(i=0; i<numplayers;i++)
-{
-	printf("Do you want to quit the game(1 for No, 2 for Yes.");
-	scanf("%d", &quit);
-	
-	if(quit==2)
-	{
-		numplayers-=1;
-	}
+		// Termination of game
+		for(i=0; i < numplayers; i++)
+		{
+		printf("Do you wish to quit the game?: enter 1 for No, 2 for Yes");
+		scanf(%d, &quit)
+		if(quit == 2){
+		printf("Game over for player %d, i);
+		for(k = i + 1; k < numplayers; k++){
+		players[i] = players[i + 1];
+		numplayers -= 1;
+		}
 	
 }
 
