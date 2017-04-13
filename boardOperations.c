@@ -96,6 +96,36 @@ void createBoard(int boardSize, struct slot **upLeft, struct slot **upRight, str
 	}
 }
 
+void type_of_slot(struct slot **board, struct player players[], int pcounter)
+{
+	int nothing=0;
+	if(strcmp(board[players[pcounter].positionRow][players[pcounter].positionColumn].type, "Hill") == 0)
+	{
+		if(players[pcounter].dexterity < 50)
+		{
+			players[pcounter].strength -=10;
+		}
+		else if(players[pcounter].dexterity >= 60)
+		{
+			players[pcounter].strength +=10;
+		}
+	}
+	else if(strcmp(board[players[pcounter].positionRow][players[pcounter].positionColumn].type, "City") == 0)
+	{
+		if(players[pcounter].smartness > 60)
+		{
+			players[pcounter].skill +=10;
+		}
+		else if(players[pcounter].smartness <= 50)
+		{
+			players[pcounter].dexterity -=10;
+		}
+	}
+	else
+	{
+		nothing++;
+	}
+}
 
 
 
