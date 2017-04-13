@@ -43,6 +43,12 @@ void pointsHuman(struct player players[]);
 void pointsOgre(struct player players[]);
 void pointsElf(struct player players[]);
 void pointsWizard(struct player players[]);
+void nearAttack(struct player players[], int attacked);
+void distantAttack(struct player players[], int pcounter, int attacked);
+void magicAttack(struct player players[], int pcounter, int attacked);
+int adjacentTest(struct player players[], int pcounter, int attacked);
+int distantTest(struct player players[], int pcounter, int attacked);
+void type_of_slot(struct slot **board, struct player players[], int pcounter);
 
 
 #endif
