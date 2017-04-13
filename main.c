@@ -18,6 +18,7 @@ void distantAttack(struct player players[], int pcounter, int attkPlyr);
 void magicAttack(struct player players[], int pcounter, int attkPlyr);
 int adjacentTest(struct player players[], int pcounter, int attkPlyr);
 int distantTest(struct player players[], int pcounter, int attkPlyr);
+void type_of_slot(struct slot **board, struct player players[], int pcounter);
 
 int main(void)
 {
@@ -26,7 +27,7 @@ int main(void)
 	time_t t;
 	srand((unsigned) time(&t));
 
-	int row=7, column=5, boardSize=7, choice;
+	int boardSize=7, choice;
 
 	struct slot *upLeft;
 	struct slot *upRight;
@@ -34,7 +35,7 @@ int main(void)
 	struct slot *downRight;
 
 	struct player players[numplayers];
-	struct slot **board;
+	struct slot **board = malloc(boardSize * sizeof(struct slot *));
 
 	int i, h;
 	int invalid=0, invalid1=0; //checking variable to make sure user inputs are valid
@@ -99,32 +100,13 @@ int main(void)
 		players[i].positionColumn = n;
 	}
 
-	if(row >= boardSize/2){
-		if(column >= boardSize/2){
-			reachDesiredElement(row,column,downRight);
-		}
-		else{
-			reachDesiredElement(row,column,downLeft);
-		}
-	}
-	else{
-		if(column >= boardSize/2){
-			reachDesiredElement(row,column, upRight);
-		}
-		else{
-			reachDesiredElement(row,column,upLeft);
-		}
-	}
-
 	int pcounter;
-	int invalid3 = 0, checker, rowChoice, columnChoice;
+	int invalid3 = 0, checker, rowChoice, columnChoice, attkType, attkPlyr;
 
 	for(pcounter=0; pcounter<numplayers; pcounter++)
 	{
 		printf("Enter 1 to move to an adjacent slot, 2 to attack another player, or 3 to exit the game.\n");
 		scanf("%d", &choice);
-
-		int invalid3 = 0, checker, rowChoice, columnChoice, attkType, attkPlyr, quit;
 
 		while(invalid3 == 0);
 		{
@@ -136,14 +118,14 @@ int main(void)
 
 					if(players[pcounter].positionRow == 1 && players[pcounter].positionColumn == 1)
 					{
-						printf("You can move to slot (1, 2) or (2, 1). Enter your choice in the form: (x, y).");
-						scanf("(%d, %d)" &rowChoice, &columnChoice);
+						printf("You can move to slot (1, 2) or (2, 1). Enter your choice in the form: x, y.");
+						scanf("(%d, %d)", &rowChoice, &columnChoice);
 
 						if(rowChoice == 1 && columnChoice == 2)
 						{
 							players[pcounter].positionRow = 1;
 							players[pcounter].positionColumn = 2;
-							slotType(&board, players, pcounter);
+							type_of_slot(&board, players, pcounter);
 
 							checker=1;
 						}
@@ -151,7 +133,7 @@ int main(void)
 						{
 							players[pcounter].positionRow = 2;
 							players[pcounter].positionColumn = 1;
-							slotType(&board, players, pcounter);
+							type_of_slot(&board, players, pcounter);
 
 							checker=1;
 						}
@@ -164,13 +146,13 @@ int main(void)
 					else if(players[i].positionRow == 1 && players[i].positionColumn == 7)
 					{
 						printf("You can move to slot (1, 6) or (2, 7). Enter your choice in the form: (x, y).");
-						scanf("(%d, %d)" &rowChoice, &columnChoice);
+						scanf("(%d, %d)", &rowChoice, &columnChoice);
 
 						if(rowChoice == 1 && columnChoice == 6)
 						{
 							players[pcounter].positionRow = 1;
 							players[pcounter].positionColumn = 6;
-							slotType(&board, players, pcounter);
+							type_of_slot(&board, players, pcounter);
 
 							checker=1;
 						}
@@ -178,7 +160,7 @@ int main(void)
 						{
 							players[pcounter].positionRow = 2;
 							players[pcounter].positionColumn = 7;
-							slotType(&board, players, pcounter);
+							type_of_slot(&board, players, pcounter);
 
 							checker=1;
 						}
@@ -191,13 +173,13 @@ int main(void)
 					else if(players[i].positionRow == 7 && players[i].positionColumn == 7)
 					{
 						printf("You can move to slot (7, 6) or (6, 7). Enter your choice in the form: (x, y).");
-						scanf("(%d, %d)" &rowChoice, &columnChoice);
+						scanf("(%d, %d)", &rowChoice, &columnChoice);
 
 						if((rowChoice == 7 && columnChoice == 6))
 						{
 							players[pcounter].positionRow = 7;
 							players[pcounter].positionColumn = 6;
-							slotType(&board, players, pcounter);
+							type_of_slot(&board, players, pcounter);
 
 							checker=1;
 						}
@@ -205,7 +187,7 @@ int main(void)
 						{
 							players[pcounter].positionRow = 6;
 							players[pcounter].positionColumn = 7;
-							slotType(&board, players, pcounter);
+							type_of_slot(&board, players, pcounter);
 
 							checker=1;
 						}
@@ -218,13 +200,13 @@ int main(void)
 					else if(players[i].positionRow == 7 && players[i].positionColumn == 1)
 					{
 						printf("You can move to slot (6, 1) or (7, 2). Enter your choice in the form: (x, y).");
-						scanf("(%d, %d)" &rowChoice, &columnChoice);
+						scanf("(%d, %d)", &rowChoice, &columnChoice);
 
 						if(rowChoice == 6 && columnChoice == 1)
 						{
 							players[pcounter].positionRow = 6;
 							players[pcounter].positionColumn = 1;
-							slotType(&board, players, pcounter);
+							type_of_slot(&board, players, pcounter);
 
 							checker=1;
 						}
@@ -232,7 +214,7 @@ int main(void)
 						{
 							players[pcounter].positionRow = 7;
 							players[pcounter].positionColumn = 2;
-							slotType(&board, players, pcounter);
+							type_of_slot(&board, players, pcounter);
 
 							checker=1;
 						}
@@ -247,33 +229,33 @@ int main(void)
 						printf("You can move to slot (%d, %d) or (%d, %d) or (%d, %d) or (%d, %d). Enter your choice in the form: (x, y)."
 								, players[pcounter].positionRow + 1, players[pcounter].positionColumn, players[pcounter].positionRow, players[pcounter].positionColumn + 1
 								, players[pcounter].positionRow - 1, players[pcounter].positionColumn, players[pcounter].positionRow, players[pcounter].positionColumn - 1);
-						scanf("(%d, %d)" &rowChoice, &columnChoice);
+						scanf("(%d, %d)", &rowChoice, &columnChoice);
 
 						if(rowChoice == players[pcounter].positionRow + 1 && columnChoice == players[pcounter].positionColumn)
 						{
 							players[pcounter].positionRow = players[pcounter].positionRow + 1;
-							slotType(&board, players, pcounter);
+							type_of_slot(&board, players, pcounter);
 
 							checker=1;
 						}
 						else if(rowChoice == players[pcounter].positionRow && columnChoice == players[pcounter].positionColumn + 1)
 						{
 							players[pcounter].positionColumn = players[pcounter].positionColumn + 1;
-							slotType(&board, players, pcounter);
+							type_of_slot(&board, players, pcounter);
 
 							checker=1;
 						}
 						else if(rowChoice == players[pcounter].positionRow - 1 && columnChoice == players[pcounter].positionColumn)
 						{
 							players[pcounter].positionRow = players[pcounter].positionRow - 1;
-							slotType(&board, players, pcounter);
+							type_of_slot(&board, players, pcounter);
 
 							checker=1;
 						}
 						else if(rowChoice == players[pcounter].positionRow && columnChoice == players[pcounter].positionColumn - 1)
 						{
 							players[pcounter].positionColumn = players[pcounter].positionColumn - 1;
-							slotType(&board, players, pcounter);
+							type_of_slot(&board, players, pcounter);
 
 							checker=1;
 						}
@@ -303,7 +285,7 @@ int main(void)
 					}
 					else
 					{
-						nearAttack(attkPlyr);//Call the attack if they're adjacent
+						nearAttack(players, attkPlyr);//Call the attack if they're adjacent
 					}
 				}
 
@@ -338,8 +320,8 @@ int main(void)
 				printf("\n%s has left the game.\n", players[pcounter].name);
 				for(h=pcounter; h<numplayers; h++)
 				{
-					players[h].name = players[h+1].name;
-					players[h].player_type = players[h+1].player_type;
+					strcpy(players[h].name, players[h+1].name);
+					strcpy(players[h].player_type, players[h+1].player_type);
 					players[h].life_pts = players[h+1].life_pts;
 					players[h].smartness = players[h+1].smartness;
 					players[h].strength = players[h+1].strength;
@@ -426,7 +408,7 @@ int distantTest(struct player players[], int pcounter, int attkPlyr)
 {
 	int test, distance;
 
-	if(adjacentTest(players[attkPlyr], players[pcounter]) == 1)
+	if(adjacentTest(players, pcounter, attkPlyr) == 1)
 	{
 		test = 0; // player [m] fails the distant test if he's adjacent to player[n]
 	}
@@ -444,7 +426,7 @@ int distantTest(struct player players[], int pcounter, int attkPlyr)
 	return test;
 }
 
-void slotType(struct slot **board, struct player players, int pcounter)
+void type_of_slot(struct slot **board, struct player players[], int pcounter)
 {
 	int nothing=0;
 	if(strcmp(board[players[pcounter].positionRow][players[pcounter].positionColumn].type, "Hill") == 0)
