@@ -13,23 +13,22 @@
 
 void createBoard(int boardSize, struct slot **upLeft, struct slot **upRight, struct slot **downLeft, struct slot **downRight, struct slot **board)
 {
-	**board = malloc(boardSize *sizeof(struct slot));
-
 	int i, j;
 
 	for(i=0; i<boardSize; i++)
 	{
 		board[i] = malloc(boardSize *sizeof(struct slot));
-	}
 
-	for(j=0; j<boardSize; j++)
-	{
-		for(i=0; i<boardSize; i++)
+		for(j=0; j<boardSize; j++)
 		{
 			board[i][j].row = i;
 			board[i][j].column = j;
 		}
 	}
+
+
+
+
 
 	for(i=1; i<boardSize-1; i++){
 		for(j=1;j<boardSize-1; j++){
