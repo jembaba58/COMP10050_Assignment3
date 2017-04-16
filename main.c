@@ -12,9 +12,6 @@
 #include "crossfireOperations.h"
 #include <math.h>
 
-//Function Prototypes
-
-
 int main(void)
 {
 	setbuf(stdout, NULL);
@@ -24,58 +21,54 @@ int main(void)
 
 	int boardSize=7, choice;
 
-	struct slot *upLeft;
-	struct slot *upRight;
-	struct slot *downLeft;
-	struct slot *downRight;
-
 	struct player players[numplayers];
 	struct slot **board = malloc(boardSize * sizeof(struct slot *));
 
 	int i, h;
-	int invalid=0, invalid1=0, invalid5=0, invalid6; //checking variable to make sure user inputs are valid
+	int k, n, q, g, o, x, b;
+	int invalid=0, invalid5=0, invalid6; //checking variable to make sure user inputs are valid
 
-	while(invalid==0)
+	while(invalid == 0)
 	{
-		printf("\n\nPlease input the number of players you would like to enter into the game (Maximum 6) : ");
+		printf("\n\nPlease input the number of players you would like to enter into the game (Maximum 6, Minimum 2) : ");
 		scanf("%d", &numplayers);
 
 		if(numplayers>=2 && numplayers<=6)
 		{
-			while(invalid1==0)
-			{
-				i=0;
-				while(i<numplayers)
-				{
-					//For each playerNumber, we ask for the the type and name.
-					printf("\nPlease enter the name and player type (elf, human, ogre or wizard) for player %d (in lowercase letters and in the format: player name player type) :\n", i+1);
-					scanf("%s %s", players[i].name, players[i].player_type);
-
-					//check if what the user inputed is valid
-					if(strcmp(players[i].player_type, "elf") == 0 || strcmp(players[i].player_type, "human") == 0 || strcmp(players[i].player_type, "ogre") == 0 || strcmp(players[i].player_type, "wizard") == 0)
-					{
-						invalid1 = 1;
-						i++;
-					}
-					else
-					{
-						printf("Invalid player type.\n");
-					}
-				}
-			}
 			invalid = 1;
 		}
 		else
 		{
-			printf("Invalid number of players.\n");
+			printf("Invalid number of players\n");
 		}
 	}
 
-	//initialise all players life points to 100
-	for(i=0; i<numplayers; i++)
+	i=0;
+	while(i<numplayers)
 	{
-		players[i].life_pts = 100;
+		//For each playerNumber, we ask for the the type and name.
+		printf("\nPlease enter the name and player type (elf, human, ogre or wizard) for player %d (in lowercase letters and in the format: player name player type) :\n", i+1);
+		scanf("%s %s", players[i].name, players[i].player_type);
+
+		//check if what the user inputed is valid
+		if(strcmp(players[i].player_type, "elf") == 0 || strcmp(players[i].player_type, "human") == 0 || strcmp(players[i].player_type, "ogre") == 0 || strcmp(players[i].player_type, "wizard") == 0)
+		{
+			i++;
+		}
+		else
+		{
+			printf("Invalid player type.\n");
+		}
 	}
+
+	printf("\n1\n");
+
+	for(b=0; b<numplayers; b++)
+	{
+		players[b].life_pts = 100;
+	}
+
+	printf("\n2\n");
 
 	//call capability functions
 	pointsHuman(players);
@@ -83,10 +76,13 @@ int main(void)
 	pointsElf(players);
 	pointsWizard(players);
 
-	createBoard(boardSize, &upLeft, &upRight, &downLeft, &downRight, &board);
+	printf("\n3\n");
 
-	int k, n, q, g, o;
-	for(i=0; i<numplayers; i++)
+	createBoard(boardSize, board);
+
+	printf("\n4\n");
+
+	for(x=0; x<numplayers; x++)
 	{
 		k = rand()%(boardSize);
 		n = rand()%(boardSize);
@@ -95,279 +91,275 @@ int main(void)
 		players[i].positionColumn = n;
 	}
 
+	printf("\n5\n");
+
 	int pcounter, cplayer;
-	int invalid3 = 0, checker, rowChoice, columnChoice, attkType, attacked;
+	int checker, rowChoice, columnChoice, attkType, attacked;
 	char attkPlyr[15];
 
 	while(numplayers>1)
 	{
 		for(pcounter=0; pcounter<numplayers; pcounter++)
 		{
-			printf("Enter 1 to move to an adjacent slot, 2 to attack another player, or 3 to exit the game.\n");
+			printf("\nEnter 1 to move to an adjacent slot, 2 to attack another player, or 3 to exit the game : ");
 			scanf("%d", &choice);
+			printf("\n4\n");
 
-			while(invalid3 == 0);
+			if(choice == 1)
 			{
-				if(choice == 1)
+				printf("\n2\n");
+				do
 				{
-					do
+					printf("You are currently in slot (%d, %d) of type %s", players[pcounter].positionRow, players[pcounter].positionColumn, board[players[pcounter].positionRow][players[pcounter].positionColumn].type);
+
+					if(players[pcounter].positionRow == 1 && players[pcounter].positionColumn == 1)
 					{
-						printf("You are currently in slot (%d, %d) of type %s", players[pcounter].positionRow, players[pcounter].positionColumn, board[players[pcounter].positionRow][players[pcounter].positionColumn].type);
+						printf("You can move to slot (1, 2) or (2, 1). Enter your choice in the form: x, y.");
+						scanf("(%d, %d)", &rowChoice, &columnChoice);
 
-						if(players[pcounter].positionRow == 1 && players[pcounter].positionColumn == 1)
+						if(rowChoice == 1 && columnChoice == 2)
 						{
-							printf("You can move to slot (1, 2) or (2, 1). Enter your choice in the form: x, y.");
-							scanf("(%d, %d)", &rowChoice, &columnChoice);
+							players[pcounter].positionRow = 1;
+							players[pcounter].positionColumn = 2;
+							type_of_slot(board, players, pcounter);
 
-							if(rowChoice == 1 && columnChoice == 2)
+							checker=1;
+						}
+						else if(rowChoice == 2 && columnChoice == 1)
+						{
+							players[pcounter].positionRow = 2;
+							players[pcounter].positionColumn = 1;
+							type_of_slot(board, players, pcounter);
+
+							checker=1;
+						}
+						else
+						{
+							printf("Invalid choice.\n");
+							checker=0;
+						}
+					}
+					else if(players[i].positionRow == 1 && players[i].positionColumn == 7)
+					{
+						printf("You can move to slot (1, 6) or (2, 7). Enter your choice in the form: (x, y).");
+						scanf("(%d, %d)", &rowChoice, &columnChoice);
+
+						if(rowChoice == 1 && columnChoice == 6)
+						{
+							players[pcounter].positionRow = 1;
+							players[pcounter].positionColumn = 6;
+							type_of_slot(board, players, pcounter);
+
+							checker=1;
+						}
+						else if(rowChoice == 2 && columnChoice == 7)
+						{
+							players[pcounter].positionRow = 2;
+							players[pcounter].positionColumn = 7;
+							type_of_slot(board, players, pcounter);
+
+							checker=1;
+						}
+						else
+						{
+							printf("Invalid choice.\n");
+							checker=0;
+						}
+					}
+					else if(players[i].positionRow == 7 && players[i].positionColumn == 7)
+					{
+						printf("You can move to slot (7, 6) or (6, 7). Enter your choice in the form: (x, y).");
+						scanf("(%d, %d)", &rowChoice, &columnChoice);
+
+						if((rowChoice == 7 && columnChoice == 6))
+						{
+							players[pcounter].positionRow = 7;
+							players[pcounter].positionColumn = 6;
+							type_of_slot(board, players, pcounter);
+
+							checker=1;
+						}
+						else if(rowChoice == 6 && columnChoice == 7)
+						{
+							players[pcounter].positionRow = 6;
+							players[pcounter].positionColumn = 7;
+							type_of_slot(board, players, pcounter);
+
+							checker=1;
+						}
+						else
+						{
+							printf("Invalid choice.\n");
+							checker=0;
+						}
+					}
+					else if(players[i].positionRow == 7 && players[i].positionColumn == 1)
+					{
+						printf("You can move to slot (6, 1) or (7, 2). Enter your choice in the form: (x, y).");
+						scanf("(%d, %d)", &rowChoice, &columnChoice);
+
+						if(rowChoice == 6 && columnChoice == 1)
+						{
+							players[pcounter].positionRow = 6;
+							players[pcounter].positionColumn = 1;
+							type_of_slot(board, players, pcounter);
+
+							checker=1;
+						}
+						else if(rowChoice == 7 && columnChoice == 2)
+						{
+							players[pcounter].positionRow = 7;
+							players[pcounter].positionColumn = 2;
+							type_of_slot(board, players, pcounter);
+
+							checker=1;
+						}
+						else
+						{
+							printf("Invalid choice.\n");
+							checker=0;
+						}
+					}
+					else
+					{
+						printf("You can move to slot (%d, %d) or (%d, %d) or (%d, %d) or (%d, %d). Enter your choice in the form: (x, y)."
+								, players[pcounter].positionRow + 1, players[pcounter].positionColumn, players[pcounter].positionRow, players[pcounter].positionColumn + 1
+								, players[pcounter].positionRow - 1, players[pcounter].positionColumn, players[pcounter].positionRow, players[pcounter].positionColumn - 1);
+						scanf("(%d, %d)", &rowChoice, &columnChoice);
+
+						if(rowChoice == players[pcounter].positionRow + 1 && columnChoice == players[pcounter].positionColumn)
+						{
+							players[pcounter].positionRow = players[pcounter].positionRow + 1;
+							type_of_slot(board, players, pcounter);
+
+							checker=1;
+						}
+						else if(rowChoice == players[pcounter].positionRow && columnChoice == players[pcounter].positionColumn + 1)
+						{
+							players[pcounter].positionColumn = players[pcounter].positionColumn + 1;
+							type_of_slot(board, players, pcounter);
+
+							checker=1;
+						}
+						else if(rowChoice == players[pcounter].positionRow - 1 && columnChoice == players[pcounter].positionColumn)
+						{
+							players[pcounter].positionRow = players[pcounter].positionRow - 1;
+							type_of_slot(board, players, pcounter);
+
+							checker=1;
+						}
+						else if(rowChoice == players[pcounter].positionRow && columnChoice == players[pcounter].positionColumn - 1)
+						{
+							players[pcounter].positionColumn = players[pcounter].positionColumn - 1;
+							type_of_slot(board, players, pcounter);
+
+							checker=1;
+						}
+						else
+						{
+							printf("Invalid choice.\n");
+							checker=0;
+						}
+					}
+				}while(checker == 0);
+			}
+			else if(choice == 2)
+			{
+				while(invalid5 == 0)
+				{
+					printf("Please specify the name of the player you intend to attack: ");
+					scanf("%s", &attkPlyr[15]);
+
+					for(cplayer=0; cplayer<numplayers; cplayer++)
+					{
+						if(strcmp(players[cplayer].name, attkPlyr) == 0)
+						{
+							attacked = cplayer;
+							invalid6=0;
+						}
+						else
+						{
+							printf("Player is not in game.\n");
+							invalid6=1;
+						}
+					}
+
+
+					while(invalid6 == 0)
+					{
+						printf("Please specify the type of attack: 1 for near, 2 for distant, 3 for magic");
+						scanf("%d", &attkType);
+
+						//the test for the near attack
+						if(attkType == 1)
+						{
+							if(adjacentTest(players, pcounter, attacked) == 0)//Call the test first to see if they are adjacent
 							{
-								players[pcounter].positionRow = 1;
-								players[pcounter].positionColumn = 2;
-								type_of_slot(&board, players, pcounter);
-
-								checker=1;
-							}
-							else if(rowChoice == 2 && columnChoice == 1)
-							{
-								players[pcounter].positionRow = 2;
-								players[pcounter].positionColumn = 1;
-								type_of_slot(&board, players, pcounter);
-
-								checker=1;
+								printf("Attack not allowed: player not in range.\n");//If they're not adjacent
 							}
 							else
 							{
-								printf("Invalid choice.\n");
-								checker=0;
+								nearAttack(players, attacked);//Call the attack if they're adjacent
+								invalid5=1;
 							}
 						}
-						else if(players[i].positionRow == 1 && players[i].positionColumn == 7)
+
+						//The test for the distant attack
+						else if(attkType == 2)
 						{
-							printf("You can move to slot (1, 6) or (2, 7). Enter your choice in the form: (x, y).");
-							scanf("(%d, %d)", &rowChoice, &columnChoice);
-
-							if(rowChoice == 1 && columnChoice == 6)
+							if(distantTest(players, pcounter, attacked) == 0) //Call the test for the distant attack
 							{
-								players[pcounter].positionRow = 1;
-								players[pcounter].positionColumn = 6;
-								type_of_slot(&board, players, pcounter);
-
-								checker=1;
-							}
-							else if(rowChoice == 2 && columnChoice == 7)
-							{
-								players[pcounter].positionRow = 2;
-								players[pcounter].positionColumn = 7;
-								type_of_slot(&board, players, pcounter);
-
-								checker=1;
+								printf("Attack not allowed: player not in range");
 							}
 							else
 							{
-								printf("Invalid choice.\n");
-								checker=0;
+								distantAttack(players, pcounter, attacked); //Call the attack if the distance is 2,3 or 4
+								invalid5=1;
 							}
+
 						}
-						else if(players[i].positionRow == 7 && players[i].positionColumn == 7)
+							//Test for the magic attack
+						else if(attkType == 3)
 						{
-							printf("You can move to slot (7, 6) or (6, 7). Enter your choice in the form: (x, y).");
-							scanf("(%d, %d)", &rowChoice, &columnChoice);
-
-							if((rowChoice == 7 && columnChoice == 6))
+							if(players[i].smartness + players[i].skill <= 150)
 							{
-								players[pcounter].positionRow = 7;
-								players[pcounter].positionColumn = 6;
-								type_of_slot(&board, players, pcounter);
-
-								checker=1;
-							}
-							else if(rowChoice == 6 && columnChoice == 7)
-							{
-								players[pcounter].positionRow = 6;
-								players[pcounter].positionColumn = 7;
-								type_of_slot(&board, players, pcounter);
-
-								checker=1;
+								printf("Attack not allowed: points not sufficient.\n");
 							}
 							else
 							{
-								printf("Invalid choice.\n");
-								checker=0;
-							}
-						}
-						else if(players[i].positionRow == 7 && players[i].positionColumn == 1)
-						{
-							printf("You can move to slot (6, 1) or (7, 2). Enter your choice in the form: (x, y).");
-							scanf("(%d, %d)", &rowChoice, &columnChoice);
-
-							if(rowChoice == 6 && columnChoice == 1)
-							{
-								players[pcounter].positionRow = 6;
-								players[pcounter].positionColumn = 1;
-								type_of_slot(&board, players, pcounter);
-
-								checker=1;
-							}
-							else if(rowChoice == 7 && columnChoice == 2)
-							{
-								players[pcounter].positionRow = 7;
-								players[pcounter].positionColumn = 2;
-								type_of_slot(&board, players, pcounter);
-
-								checker=1;
-							}
-							else
-							{
-								printf("Invalid choice.\n");
-								checker=0;
+								magicAttack(players, pcounter, attacked); // Call the attack if the attacker has more than 150.
+								invalid5=1;
 							}
 						}
 						else
 						{
-							printf("You can move to slot (%d, %d) or (%d, %d) or (%d, %d) or (%d, %d). Enter your choice in the form: (x, y)."
-									, players[pcounter].positionRow + 1, players[pcounter].positionColumn, players[pcounter].positionRow, players[pcounter].positionColumn + 1
-									, players[pcounter].positionRow - 1, players[pcounter].positionColumn, players[pcounter].positionRow, players[pcounter].positionColumn - 1);
-							scanf("(%d, %d)", &rowChoice, &columnChoice);
-
-							if(rowChoice == players[pcounter].positionRow + 1 && columnChoice == players[pcounter].positionColumn)
-							{
-								players[pcounter].positionRow = players[pcounter].positionRow + 1;
-								type_of_slot(&board, players, pcounter);
-
-								checker=1;
-							}
-							else if(rowChoice == players[pcounter].positionRow && columnChoice == players[pcounter].positionColumn + 1)
-							{
-								players[pcounter].positionColumn = players[pcounter].positionColumn + 1;
-								type_of_slot(&board, players, pcounter);
-
-								checker=1;
-							}
-							else if(rowChoice == players[pcounter].positionRow - 1 && columnChoice == players[pcounter].positionColumn)
-							{
-								players[pcounter].positionRow = players[pcounter].positionRow - 1;
-								type_of_slot(&board, players, pcounter);
-
-								checker=1;
-							}
-							else if(rowChoice == players[pcounter].positionRow && columnChoice == players[pcounter].positionColumn - 1)
-							{
-								players[pcounter].positionColumn = players[pcounter].positionColumn - 1;
-								type_of_slot(&board, players, pcounter);
-
-								checker=1;
-							}
-							else
-							{
-								printf("Invalid choice.\n");
-								checker=0;
-							}
-						}
-					}while(checker == 0);
-
-					invalid3 = 1;
-				}
-				else if(choice == 2)
-				{
-					while(invalid5 == 0)
-					{
-						printf("Please specify the name of the player you intend to attack: ");
-						scanf("%s", &attkPlyr[15]);
-
-						for(cplayer=0; cplayer<numplayers; cplayer++)
-						{
-							if(strcmp(players[cplayer].name, attkPlyr[15]) == 0)
-							{
-								attacked = cplayer;
-								invalid6=0;
-							}
-							else
-							{
-								printf("Player is not in game.\n");
-								invalid6=1;
-							}
-						}
-
-
-						while(invalid6 == 0)
-						{
-							printf("Please specify the type of attack: 1 for near, 2 for distant, 3 for magic");
-							scanf("%d", &attkType);
-
-							//the test for the near attack
-							if(attkType == 1)
-							{
-								if(adjacentTest(players, pcounter, attacked) == 0)//Call the test first to see if they are adjacent
-								{
-									printf("Attack not allowed: player not in range.\n");//If they're not adjacent
-								}
-								else
-								{
-									nearAttack(players, attacked);//Call the attack if they're adjacent
-									invalid5=1;
-								}
-							}
-
-							//The test for the distant attack
-							else if(attkType == 2)
-							{
-								if(distantTest(players, pcounter, attacked) == 0) //Call the test for the distant attack
-								{
-									printf("Attack not allowed: player not in range");
-								}
-								else
-								{
-									distantAttack(players, pcounter, attacked); //Call the attack if the distance is 2,3 or 4
-									invalid5=1;
-								}
-
-							}
-								//Test for the magic attack
-							else if(attkType == 3)
-							{
-								if(players[i].smartness + players[i].skill <= 150)
-								{
-									printf("Attack not allowed: points not sufficient.\n");
-								}
-								else
-								{
-									magicAttack(players, pcounter, attacked); // Call the attack if the attacker has more than 150.
-									invalid5=1;
-								}
-							}
-							else
-							{
-								printf("Invalid choice.\n");
-							}
+							printf("Invalid choice.\n");
 						}
 					}
-					invalid3 = 1;
 				}
-				else if(choice == 3)
-				{
-					printf("\n%s has left the game.\n", players[pcounter].name);
+			}
+			else if(choice == 3)
+			{
+				printf("\n%s has left the game.\n", players[pcounter].name);
 
-					for(h=pcounter; h<numplayers; h++)
-					{
-						strcpy(players[h].name, players[h+1].name);
-						strcpy(players[h].player_type, players[h+1].player_type);
-						players[h].life_pts = players[h+1].life_pts;
-						players[h].smartness = players[h+1].smartness;
-						players[h].strength = players[h+1].strength;
-						players[h].skill = players[h+1].skill;
-						players[h].luck = players[h+1].luck;
-						players[h].dexterity = players[h+1].dexterity;
-						players[h].positionRow = players[h+1].positionRow;
-						players[h].positionColumn = players[h+1].positionColumn;
-					}
-					numplayers--;
-
-					invalid3 = 1;
-				}
-				else
+				for(h=pcounter; h<numplayers; h++)
 				{
-					printf("Invalid choice\n");
+					strcpy(players[h].name, players[h+1].name);
+					strcpy(players[h].player_type, players[h+1].player_type);
+					players[h].life_pts = players[h+1].life_pts;
+					players[h].smartness = players[h+1].smartness;
+					players[h].strength = players[h+1].strength;
+					players[h].skill = players[h+1].skill;
+					players[h].luck = players[h+1].luck;
+					players[h].dexterity = players[h+1].dexterity;
+					players[h].positionRow = players[h+1].positionRow;
+					players[h].positionColumn = players[h+1].positionColumn;
 				}
+				numplayers--;
+			}
+			else
+			{
+				printf("Invalid choice\n");
 			}
 
 			// Print player names, types and life points after each round and check if any player out of game
