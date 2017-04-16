@@ -38,7 +38,7 @@ struct slot{
 	struct slot *down;
 };
 
-void createBoard(int boardSize, struct slot **upLeft, struct slot **upRight, struct slot **downLeft, struct slot **downRight, struct slot **board);
+void createBoard(int boardSize, struct slot **board);
 void pointsHuman(struct player players[]);
 void pointsOgre(struct player players[]);
 void pointsElf(struct player players[]);
